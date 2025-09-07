@@ -26,14 +26,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const addTaskToDOM = (taskText, completed = false) => {
         const todoItem = document.createElement('li');
         todoItem.classList.add('todo-item');
-        if (completed) todoItem.classList.add('completed');
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = completed;
+        checkbox.addEventListener('change', (event) => {
+            if (event.target !== deleteButton) {
+                todoItem.classList.toggle('completed', checkbox.checked);
+                saveTasks();
+            }
+        });
 
         const taskSpan = document.createElement('span');
         taskSpan.textContent = taskText;
-        taskSpan.addEventListener('click', () => {
-            todoItem.classList.toggle('completed');
-            saveTasks();
-        });
 
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Delete';
@@ -43,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
             saveTasks();
         });
 
+        todoItem.appendChild(checkbox);
         todoItem.appendChild(taskSpan);
         todoItem.appendChild(deleteButton);
         todoList.appendChild(todoItem);
