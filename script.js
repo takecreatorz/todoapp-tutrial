@@ -22,6 +22,13 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('tasks', JSON.stringify(tasks));
     };
 
+    const updateCompletedCount = () => {
+        const completedCount = Array.from(todoList.children).filter(item => item.classList.contains('completed')).length;
+        const totalCount = todoList.children.length;
+        const counterElement = document.querySelector('.todo-counter');
+        counterElement.textContent = `Completed: ${completedCount} / Total: ${totalCount}`;
+    };
+
     // Add a task to the DOM
     const addTaskToDOM = (taskText, completed = false) => {
         const todoItem = document.createElement('li');
@@ -34,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (event.target !== deleteButton) {
                 todoItem.classList.toggle('completed', checkbox.checked);
                 saveTasks();
+                updateCompletedCount();
             }
         });
 
@@ -46,12 +54,15 @@ document.addEventListener('DOMContentLoaded', () => {
         deleteButton.addEventListener('click', () => {
             todoList.removeChild(todoItem);
             saveTasks();
+            updateCompletedCount();
         });
 
         todoItem.appendChild(checkbox);
         todoItem.appendChild(taskSpan);
         todoItem.appendChild(deleteButton);
         todoList.appendChild(todoItem);
+
+        updateCompletedCount();
     };
 
     // Add a new task
@@ -65,4 +76,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     loadTasks();
+    updateCompletedCount();
 });
